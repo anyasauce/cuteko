@@ -131,9 +131,23 @@
                 document.getElementById('ipAddress').innerText = 'IP Address: ' + data.ip;
                 document.getElementById('location').innerText = 'Location: ' + data.city + ', ' + data.region + ', ' + data.country_name;
 
+                // Improved device detection
                 const userAgent = navigator.userAgent.toLowerCase();
-                const isMobile = /mobile|android|iphone|ipad|ipod/.test(userAgent);
-                document.getElementById('deviceType').innerText = 'Device Type: ' + (isMobile ? 'Phone/Tablet' : 'Laptop/PC');
+                let deviceType;
+
+                if (/android/.test(userAgent)) {
+                    deviceType = 'Android Phone';
+                } else if (/iphone|ipad|ipod/.test(userAgent)) {
+                    deviceType = 'iOS Device';
+                } else if (/windows/.test(userAgent)) {
+                    deviceType = 'Windows PC';
+                } else if (/macintosh|mac os x/.test(userAgent)) {
+                    deviceType = 'Mac Computer';
+                } else {
+                    deviceType = 'Unknown Device';
+                }
+
+                document.getElementById('deviceType').innerText = 'Device Type: ' + deviceType;
             })
             .catch(error => {
                 document.getElementById('ipAddress').innerText = 'Error fetching IP address.';
@@ -141,17 +155,17 @@
                 console.error('Error fetching IP information:', error);
             });
 
-            const fakeMacAddress = "00:1A:2B:3C:4D:5E";
-            const fakeConnectionType = "Connection Type: HACKED NETWORK DETECTED";
+        const fakeMacAddress = "00:1A:2B:3C:4D:5E";
+        const fakeConnectionType = "Connection Type: HACKED NETWORK DETECTED";
 
-            function fakeFetchMacAndConnection() {
-                setTimeout(() => {
-                    document.getElementById('macAddress').innerText = 'MAC Address: ' + fakeMacAddress;
-                    document.getElementById('connectionType').innerText = fakeConnectionType;
-                },50);
-            }
+        function fakeFetchMacAndConnection() {
+            setTimeout(() => {
+                document.getElementById('macAddress').innerText = 'MAC Address: ' + fakeMacAddress;
+                document.getElementById('connectionType').innerText = fakeConnectionType;
+            }, 50);
+        }
 
-            fakeFetchMacAndConnection();
+        fakeFetchMacAndConnection();
 
     </script>
     
