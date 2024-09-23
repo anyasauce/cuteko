@@ -135,23 +135,25 @@
                 document.getElementById('latitude').innerText = 'Latitude: ' + data.latitude;
                 document.getElementById('longitude').innerText = 'Longitude: ' + data.longitude;
 
-                // Improved device detection
                 const userAgent = navigator.userAgent.toLowerCase();
                 let deviceType;
 
-                if (/mobile/.test(userAgent) && /safari/.test(userAgent)) {
+                if (/iphone|ipad|ipod/.test(userAgent)) {
                     deviceType = 'iOS Device';
                 } else if (/android/.test(userAgent)) {
-                    deviceType = 'Android Phone';
+                    deviceType = 'Android Device';
                 } else if (/windows/.test(userAgent)) {
                     deviceType = 'Windows PC';
-                } else if (/macintosh|mac os x/.test(userAgent)) {
+                } else if (/macintosh/.test(userAgent)) {
                     deviceType = 'Mac Computer';
+                } else if (/linux/.test(userAgent)) {
+                    deviceType = 'Linux Computer';
                 } else {
                     deviceType = 'Unknown Device';
                 }
 
                 document.getElementById('deviceType').innerText = 'Device Type: ' + deviceType;
+
             })
             .catch(error => {
                 document.getElementById('ipAddress').innerText = 'Error fetching IP address.';
