@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 Uh Oh! Hacked! 🚨</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #212529;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px red;
+            animation: shake 0.5s infinite alternate;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); }
+            100% { transform: translate(-1px, -1px); }
+        }
+        .message {
+            color: red;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: shake 0.5s infinite;
+        }
+        .info, .alert, .fake-code {
+            background-color: rgba(255, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        .fake-code {
+            font-family: monospace;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: lime;
+            text-align: left;
+            animation: blink 1s infinite;
+            height: auto;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .message {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="hackedTitle">🚨 Uh Oh! You’ve Been Hacked! 🚨</h1>
+        <div class="info mt-4">
+            <p id="ipAddress"></p>
+            <p id="location"></p>
+            <p id="deviceType"></p>
+            <p id="macAddress"></p>
+            <p id="connectionType"></p>
+        </div>
+        <div class="alert">
+            <p class="message">WARNING: Your personal information is at risk!</p>
+            <p>Please do not close this window!</p>
+        </div>
+        <div class="fake-code" id="fakeCodeBlock">
+            Attempting to bypass security protocols...
+            <br><br>
+            Please wait...
+            <br>
+        </div>
+    </div>
+
+    <audio id="hackedSound" src="https://www.myinstants.com/media/sounds/hacking.mp3" preload="auto" loop autoplay></audio>
+    <audio id="serenSound" src="https://elements.envato.com/siren-YRL6BSM" loop autoplay preload="auto"></audio>
+
+    <script>
+        const fakeCodeBlock = document.getElementById('fakeCodeBlock');
+        const hackedSound = document.getElementById('hackedSound');
+        const serenSound = document.getElementById('serenSound');
+
+        function playSounds() {
+            hackedSound.play();
+            serenSound.play();
+        }
+
+        const fakeHackingSteps = [
+            "Connecting to target...",
+            "Bypassing firewall...",
+            "Access granted!",
+            "Retrieving sensitive information...",
+            "Decrypting files...",
+            "Accessing camera...",
+            "Logging keystrokes...",
+            "Files extracted: password.txt, browsing_history.txt",
+            "Uploading data to server...",
+            "Operation completed."
+        ];
+
+        let stepIndex = 0;
+
+        function displayNextStep() {
+            if (stepIndex < fakeHackingSteps.length) {
+                fakeCodeBlock.innerText += '\n' + fakeHackingSteps[stepIndex];
+                stepIndex++;
+                setTimeout(displayNextStep, 2000);
+            }
+        }
+
+        setTimeout(() => {
+            playSounds();
+            displayNextStep();
+        }, 2000);
+
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                return fetch(`https://ipapi.co/${ip}/json/`);
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').innerText = 'IP Address: ' + data.ip;
+                document.getElementById('location').innerText = 'Location: ' + data.city + ', ' + data.region + ', ' + data.country_name;
+
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isMobile = /mobile|android|iphone|ipad|ipod/.test(userAgent);
+                document.getElementById('deviceType').innerText = 'Device Type: ' + (isMobile ? 'Phone/Tablet' : 'Laptop/PC');
+            })
+            .catch(error => {
+                document.getElementById('ipAddress').innerText = 'Error fetching IP address.';
+                document.getElementById('location').innerText = 'Error fetching location.';
+                console.error('Error fetching IP information:', error);
+            });
+
+            const fakeMacAddress = "00:1A:2B:3C:4D:5E";
+            const fakeConnectionType = "Connection Type: HACKED NETWORK DETECTED";
+
+            function fakeFetchMacAndConnection() {
+                setTimeout(() => {
+                    document.getElementById('macAddress').innerText = 'MAC Address: ' + fakeMacAddress;
+                    document.getElementById('connectionType').innerText = fakeConnectionType;
+                },570);
+            }
+
+            fakeFetchMacAndConnection();
+
+    </script>
+    
+</body>
+</html>
