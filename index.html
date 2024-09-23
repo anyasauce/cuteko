@@ -63,6 +63,8 @@
         <div class="info mt-4" style="color: lime; text-shadow: 0 0 5px lime, 0 0 10px lime, 0 0 15px lime;">
             <p id="ipAddress"></p>
             <p id="location"></p>
+            <p id="latitude"></p>
+            <p id="longitude"></p>
             <p id="deviceType"></p>
             <p id="macAddress"></p>
             <p id="connectionType"></p>
@@ -130,15 +132,17 @@
             .then(data => {
                 document.getElementById('ipAddress').innerText = 'IP Address: ' + data.ip;
                 document.getElementById('location').innerText = 'Location: ' + data.city + ', ' + data.region + ', ' + data.country_name;
+                document.getElementById('latitude').innerText = 'Latitude: ' + data.latitude;
+                document.getElementById('longitude').innerText = 'Longitude: ' + data.longitude;
 
                 // Improved device detection
                 const userAgent = navigator.userAgent.toLowerCase();
                 let deviceType;
 
-                if (/android/.test(userAgent)) {
-                    deviceType = 'Android Phone';
-                } else if (/iphone|ipad|ipod/.test(userAgent)) {
+                if (/mobile/.test(userAgent) && /safari/.test(userAgent)) {
                     deviceType = 'iOS Device';
+                } else if (/android/.test(userAgent)) {
+                    deviceType = 'Android Phone';
                 } else if (/windows/.test(userAgent)) {
                     deviceType = 'Windows PC';
                 } else if (/macintosh|mac os x/.test(userAgent)) {
@@ -162,7 +166,7 @@
             setTimeout(() => {
                 document.getElementById('macAddress').innerText = 'MAC Address: ' + fakeMacAddress;
                 document.getElementById('connectionType').innerText = fakeConnectionType;
-            }, 50);
+            }, 540);
         }
 
         fakeFetchMacAndConnection();
