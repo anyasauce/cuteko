@@ -90,11 +90,6 @@
         const hackedSound = document.getElementById('hackedSound');
         const serenSound = document.getElementById('serenSound');
 
-        function playSounds() {
-            hackedSound.play();
-            serenSound.play();
-        }
-
         const fakeHackingSteps = [
             "Connecting to target...",
             "Bypassing firewall...",
@@ -109,19 +104,42 @@
         ];
 
         let stepIndex = 0;
+        const stepsDuration = 2000; // Duration between steps
+
+        function playSounds() {
+            hackedSound.play();
+            serenSound.play();
+        }
 
         function displayNextStep() {
             if (stepIndex < fakeHackingSteps.length) {
                 fakeCodeBlock.innerText += '\n' + fakeHackingSteps[stepIndex];
                 stepIndex++;
-                setTimeout(displayNextStep, 2000);
+                setTimeout(displayNextStep, stepsDuration);
             }
         }
 
-        setTimeout(() => {
-            playSounds();
-            displayNextStep();
-        }, 2000);
+        function initialize() {
+            const lastVisit = localStorage.getItem('lastVisit');
+            const currentTime = Date.now();
+            if (lastVisit && (currentTime - lastVisit < 300000)) { // 5 minutes = 300000 ms
+                stepIndex = parseInt(localStorage.getItem('stepIndex')) || 0;
+                fakeCodeBlock.innerText = localStorage.getItem('fakeCodeText') || "Attempting to bypass security protocols...\n\nPlease wait...\n";
+                setTimeout(displayNextStep, stepsDuration);
+            } else {
+                localStorage.setItem('lastVisit', currentTime);
+                stepIndex = 0;
+                fakeCodeBlock.innerText = "Attempting to bypass security protocols...\n\nPlease wait...\n";
+                playSounds();
+                displayNextStep();
+            }
+        }
+
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('lastVisit', Date.now());
+            localStorage.setItem('stepIndex', stepIndex);
+            localStorage.setItem('fakeCodeText', fakeCodeBlock.innerText);
+        });
 
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
@@ -173,6 +191,7 @@
         }
 
         fakeFetchMacAndConnection();
+        initialize();
 
     </script>
     
